@@ -68,7 +68,7 @@
       "response": []
     },
     {
-      "name": "Login - invalid payload",
+      "name": "GET current auth user",
       "event": [
         {
           "listen": "test",
@@ -84,11 +84,71 @@
               "\r",
               "const data = pm.response.json();\r",
               "\r",
-              "pm.test(\"accessToken is present\", () => {\r",
-              "  pm.expect(data).to.have.property(\"accessToken\");\r",
+              "pm.test(\"User object has username\", () => {\r",
+              "  pm.expect(data).to.have.property(\"username\");\r",
+              "});\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/me",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "me"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login - invalid payload",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 400\", () => {\r",
+              "  pm.expect(pm.response.code).to.eql(400);\r",
               "});\r",
               "\r",
-              "pm.environment.set(\"accessToken\", data.accessToken);\r",
+              "pm.test(\"Response is JSON\", () => {\r",
+              "  pm.response.to.be.json;\r",
+              "});\r",
+              "\r",
+              "const data = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Error message is present\", () => {\r",
+              "  pm.expect(data).to.have.property(\"message\");\r",
+              "});\r",
               ""
             ],
             "type": "text/javascript",
@@ -108,7 +168,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n  \"username\": \"{{username}}\",\r\n  \"password\": \"{{password}}\",\r\n  \"expiresInMins\": 30\r\n}\r\n",
+          "raw": "{\r\n  \"email\": \"{{username}}\",\r\n  \"password\": \"{{password}}\",\r\n  \"expiresInMins\": 30\r\n}\r\n",
           "options": {
             "raw": {
               "language": "json"
@@ -125,14 +185,6 @@
             "login"
           ]
         }
-      },
-      "response": []
-    },
-    {
-      "name": "GET current auth user",
-      "request": {
-        "method": "GET",
-        "header": []
       },
       "response": []
     }
