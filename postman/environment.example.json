@@ -19,16 +19,10 @@
 			"value": "",
 			"type": "default",
 			"enabled": true
-		},
-		{
-			"key": "accessToken",
-			"value": "",
-			"type": "default",
-			"enabled": true
 		}
 	],
 	"color": null,
 	"_postman_variable_scope": "environment",
-	"_postman_exported_at": "2026-02-03T16:03:09.065Z",
-	"_postman_exported_using": "Postman/11.83.3-260203-0728"
+	"_postman_exported_at": "2026-06-04T13:30:31.705Z",
+	"_postman_exported_using": "Postman/12.13.5"
 }

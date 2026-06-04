@@ -47,7 +47,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n  \"username\": \"{{username}}\",\r\n  \"password\": \"{{password}}\",\r\n  \"expiresInMins\": 30\r\n}\r\n",
+          "raw": "{\r\n  \"username\": \"emilys\",\r\n  \"password\": \"emilyspass\"\r\n}\r\n",
           "options": {
             "raw": {
               "language": "json"
@@ -183,6 +183,223 @@
           "path": [
             "auth",
             "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "all products",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", () => {\r",
+              "  pm.expect(pm.response.code).to.eql(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response is JSON\", () => {\r",
+              "  pm.response.to.be.json;\r",
+              "});\r",
+              "\r",
+              "const data = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Response contains product data\", () => {\r",
+              "    pm.expect(data).to.have.property('products');\r",
+              "    pm.expect(data.products).to.be.an('array');\r",
+              "    });\r",
+              "\r",
+              "pm.test(\"Products array is not empty\", () => {\r",
+              "    pm.expect(data.products).to.have.length.above(0);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/products",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get product by ID",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", () => {",
+              "    pm.expect(pm.response.code).to.eql(200);",
+              "})",
+              "",
+              "pm.test(\"Response is JSON\", () => {",
+              "  pm.response.to.be.json;",
+              "});",
+              "",
+              "pm.test(\"Response contains title field\", () => {",
+              "    pm.expect(pm.response.json()).to.have.property(\"title\")",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{baseUrl}}/products/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET products search",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", () => {\r",
+              "  pm.expect(pm.response.code).to.eql(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response is JSON\", () => {\r",
+              "  pm.response.to.be.json;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Products array is not empty\", () => {\r",
+              "    pm.expect(pm.response.json().products).to.have.length.above(0);\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/search?q=phone",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "search"
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "phone"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Authorisation without token",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 401\", () => {\r",
+              "    pm.expect(pm.response.code).to.eql(401);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response contains error message\", () => {\r",
+              "    pm.expect(pm.response.json().message).to.have.length.above(0);\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "pm.environment.unset(\"accessToken\");",
+              "pm.environment.unset(\"refreshToken\");",
+              "pm.globals.unset(\"accessToken\");",
+              "pm.globals.unset(\"refreshToken\");",
+              "",
+              "const jar = pm.cookies.jar();",
+              "jar.clear('https://dummyjson.com', function(err) {",
+              "    if (err) {",
+              "        console.log('Error clearing cookies:', err);",
+              "    } else {",
+              "        console.log('Cookies cleared successfully');",
+              "    }",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/auth/me",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "me"
           ]
         }
       },

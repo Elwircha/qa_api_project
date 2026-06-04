@@ -10,6 +10,10 @@ Tested endpoints:
 - POST /auth/login — success (get access token)
 - GET /auth/me — authorized request (Bearer token)
 - POST /auth/login — negative case (invalid payload → 400)
+- GET /products — list all products
+- GET /products/1 — single product by ID  
+- GET /products/search?q=phone — product search
+- GET /auth/me without token — 401 negative case
 
 ## Artifacts
 - Postman collection: [postman/collection.json](./postman/collection.json)
@@ -21,6 +25,10 @@ Tested endpoints:
 3. Run requests:
    - Login - success
    - GET current auth user
+   - GET all products
+   - GET product by ID
+   - GET products search
    - Login - invalid payload
+   - Authorisation without token
 
-**Results:** 3 requests • 1 auth flow • 1 negative case
+**Results:** 7 requests • auth flow • products endpoints • negative cases (401, 400)
